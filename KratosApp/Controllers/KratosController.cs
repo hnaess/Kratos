@@ -14,9 +14,9 @@ namespace KratosApp.Controller
     {
         Kratos[] kratoses = new Kratos[] 
         { 
-            new Kratos { Id = 1, Name = "Tomato Soup", Category = "Groceries", Price = 1 }, 
-            new Kratos { Id = 2, Name = "Yo-yo", Category = "Toys", Price = 3.75M }, 
-            new Kratos { Id = 3, Name = "Hammer", Category = "Hardware", Price = 16.99M } 
+            //new Kratos { Id = 1, Name = "Tomato Soup", Category = "Groceries", Price = 1 }, 
+            //new Kratos { Id = 2, Name = "Yo-yo", Category = "Toys", Price = 3.75M }, 
+            //new Kratos { Id = 3, Name = "Hammer", Category = "Hardware", Price = 16.99M } 
         };
 
         public IEnumerable<Kratos> Get()
@@ -34,11 +34,16 @@ namespace KratosApp.Controller
 
         public IHttpActionResult GetProduct(int id)
         {
-            var Kratos = kratoses.FirstOrDefault((p) => p.Id == id);
-            if (Kratos == null)
-            {
-                return NotFound();
-            }
+            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
+
+            //var Kratos = kratoses.FirstOrDefault((p) => p.Id == id);
+            //if (Kratos == null)
+            //{
+            //    return NotFound();
+            //}
+            //return Ok(Kratos);
+
+            var Kratos = kratoses.First();
             return Ok(Kratos);
         }
     }
