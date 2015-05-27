@@ -20,17 +20,17 @@
     <script>
         var apiUrl = 'api/kratos';
 
-    $(document).ready(function () {
-        // Send an AJAX request
-        $.getJSON(apiUrl)
-            .done(function (data) {
-                // On success, 'data' contains a list of products.
-                $.each(data, function (key, item) {
-                    // Add a list item for the product.
-                    $('<li>', { text: formatItem(item) }).appendTo($('#kratosList'));
-                });
-            });
-    });
+    //$(document).ready(function () {
+    //    // Send an AJAX request
+    //    $.getJSON(apiUrl)
+    //        .done(function (data) {
+    //            // On success, 'data' contains a list of products.
+    //            $.each(data, function (key, item) {
+    //                // Add a list item for the product.
+    //                $('<li>', { text: formatItem(item) }).appendTo($('#kratosList'));
+    //            });
+    //        });
+    //});
 
     function formatItem(item) {
         return item.Ext + ': $' + item.SpeedOutput;
@@ -38,9 +38,13 @@
 
     function find() {
       var id = $('#riderWeight').val();
-      $.getJSON(uri + '/' + id)
+        $.getJSON(apiUrl)
           .done(function (data) {
-              $('#kratos').text(formatItem(data));
+              // On success, 'data' contains a list of products.
+              $.each(data, function (key, item) {
+                  // Add a list item for the product.
+                  $('<li>', { text: formatItem(item) }).appendTo($('#kratosList'));
+              });
           })
           .fail(function (jqXHR, textStatus, err) {
               $('#kratos').text('Error: ' + err);
