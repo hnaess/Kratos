@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KratosApp", "KratosApp\KratosApp.csproj", "{EA523C04-423D-4A2B-93A7-3A4F99D1527C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PublishScripts", "PublishScripts", "{1390860A-C928-4A13-8930-A2D5B6C775CD}"
+	ProjectSection(SolutionItems) = preProject
+		PublishScripts\AzureWebsitePublishModule.psm1 = PublishScripts\AzureWebsitePublishModule.psm1
+		PublishScripts\Publish-WebApplicationWebsite.ps1 = PublishScripts\Publish-WebApplicationWebsite.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configurations", "{98C9805B-D965-42B6-8FDF-CA9DB8A13F5E}"
+	ProjectSection(SolutionItems) = preProject
+		PublishScripts\Configurations\KratosApp-WAWS-dev.json = PublishScripts\Configurations\KratosApp-WAWS-dev.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA523C04-423D-4A2B-93A7-3A4F99D1527C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA523C04-423D-4A2B-93A7-3A4F99D1527C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA523C04-423D-4A2B-93A7-3A4F99D1527C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA523C04-423D-4A2B-93A7-3A4F99D1527C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{98C9805B-D965-42B6-8FDF-CA9DB8A13F5E} = {1390860A-C928-4A13-8930-A2D5B6C775CD}
+	EndGlobalSection
+EndGlobal
