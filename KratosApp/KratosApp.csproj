@@ -102,6 +102,7 @@
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <None Include="Properties\PublishProfiles\KratosApp.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

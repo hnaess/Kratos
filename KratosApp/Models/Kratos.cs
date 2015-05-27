@@ -5,26 +5,36 @@ using System.Web;
 
 namespace KratosApp.Models
 {
+    [Serializable]
     public class Kratos
     {
-        public double PowerOutput { get; set; }
-        public double SpeedOutput { get; set; }
+        public double PowerOutput { get; private set; }
+        public double SpeedOutput { get; private set; }
 
         public double cad { get; set; }
 
-        public string bike { get; set; }
+        public string bike { private get; set; }
+        /// <summary>Slope of Road</summary>
         public double fstg { get; set; }
-        public double fCadc { get; set; }
         public double fP { get; set; }
         public double fV { get; set; }
+        /// <summary>Wind Speed (headwind positive, tailwind negative values)</summary>
         public double fW { get; set; }
 
+        /// <summary>Height of rider</summary>
         public double fh { get; set; }
+        /// <summary>Weight of rider</summary>
         public double fM { get; set; }
+        /// <summary>Weight of bike</summary>
+        public double fmr { get; set; }
+        /// <summary>Air Temperature (not Kelvin)</summary>
         public double fT { get; set; }
+        /// <summary>Height above SeaLevel</summary>
         public double fHn { get; set; }
 
+        /// <summary>Effective Drag Area Cd*A</summary>
         public double fCwA { get; private set; }
+        /// <summary>Rolling Resistance Coeff. Cr</summary>
         public double CrEff { get; private set; }
 
 
@@ -59,15 +69,15 @@ namespace KratosApp.Models
         public void Calc(CalcMethod calcMethod)
         {
             const double cCad = .002;
-            
+
             int fVRSelectedIndex = 0; // 0 = narrow racing tire (high pressurE)
             int fHRSelectedIndex = 0;
 
-            var fmr = afMBikeDef[bikeI] * (imperial? 2.2 : 1);
+            //var fmr = afMBikeDef[bikeI] * (imperial ? 2.2 : 1);
 
             var hRider = fh * (imperial ? .0254 : .01) * (isTandem ? 2 : 1);
             var M = fM * (imperial ? .453592 : 1) * (isTandem ? 2 : 1);
-            var MBik = fmr * (imperial? .453592 : 1);
+            var MBik = fmr * (imperial ? .453592 : 1);
             var T = imperial ? 5 * (fT - 32) / 9 : fT;
             var Hn = fHn * (imperial ? .3048 : 1);
             var Slope = Math.Atan(fstg * .01);
@@ -76,10 +86,8 @@ namespace KratosApp.Models
             var V = fV * (imperial ? .44704 : .27778);
 
             var CrDyn = 0.1 * Math.Cos(Slope);
-            var j = fVRSelectedIndex;
-            double CrV = Cr[j], ATireV = ATire[j];
-            j = fHRSelectedIndex;
-            double CrH = Cr[j], ATireH = ATire[j];
+            double CrV = Cr[fVRSelectedIndex], ATireV = ATire[fVRSelectedIndex];
+            double CrH = Cr[fHRSelectedIndex], ATireH = ATire[fHRSelectedIndex];
             CrEff = afLoadV[bikeI] * afCCrV[bikeI] * CrV + (1.0 - afLoadV[bikeI]) * CrH;
 
             var adipos = (bike == "whitehawk" || bike == "questclosed") ? 0 : Math.Sqrt(M / (hRider * 750));
@@ -90,7 +98,6 @@ namespace KratosApp.Models
             CwaRider = (1 + cad * cCad) * afCd[bikeI] * adipos * (((hRider - adipos) * afSin[bikeI]) + adipos);
             double Ka = 176.5 * Math.Exp(-Hn * .0001253) * (CwaRider + CwaBike) / (273 + T);
 
-            // Calculate based on Power
             //double outputSpeed = 0;
             if (calcMethod == CalcMethod.Power)
             {

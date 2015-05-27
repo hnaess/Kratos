@@ -4,9 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using KratosApp.Extensions;
 using KratosApp.Models;
 using System.Collections.Specialized;
 using System.Web;
+using System.Diagnostics;
 
 namespace KratosApp.Controller
 {
@@ -26,19 +28,31 @@ namespace KratosApp.Controller
                 cad = 90,
                 bike = "racetops",
                 fstg = 7,
-                fCadc = 90,
-                fP = 160,
+                fP = 300,
                 fV = 20, //9.3,
                 fW = 10,
 
                 fh = 172,
                 fM = 71.3,
+                fmr = 9.5,
                 fT = 20,
                 fHn = 350,
                 
             };
+            Kratos copy = kratos.DeepClone();
+
+            //kratos.Calc(Kratos.CalcMethod.Speed);
+            //Debug.WriteLine("Power " + kratos.PowerOutput);
+
             kratos.Calc(Kratos.CalcMethod.Power);
-            kratos.Calc(Kratos.CalcMethod.Speed);
+            Debug.WriteLine("Speed " + kratos.SpeedOutput);
+
+            kratos = copy.DeepClone();
+            kratos.fM = 100;
+            kratos.Calc(Kratos.CalcMethod.Power);
+            Debug.WriteLine("Speed " + kratos.SpeedOutput);
+
+
             return new List<Kratos>() { kratos };
         }
 
