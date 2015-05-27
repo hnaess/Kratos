@@ -32,8 +32,7 @@ namespace KratosApp.Models
             //vr = Front Wheel
             //hr = Rear Wheel
 
-
-            var asBike = new List<String>() { "roadster", "mtb", "tandem", "racetops", "racedrops", "tria", "superman", "lwbuss", "swbuss", "swbass", "ko4", "ko4tailbox", "whitehawk", "questclosed", "handtrike" };
+            //var asBike = new List<String>() { "roadster", "mtb", "tandem", "racetops", "racedrops", "tria", "superman", "lwbuss", "swbuss", "swbass", "ko4", "ko4tailbox", "whitehawk", "questclosed", "handtrike" };
             var afCd = new List<double>() { .95, .79, .35, .82, .60, .53, .47, .85, .67, .60, .50, .41, 0, 0, .62 };
             var afSin = new List<double>() { .95, .85, .7, .89, .67, .64, .55, .64, .51, .44, .37, .37, 0, 0, .55 };
             var afCdBike = new List<double>() { 2.0, 1.5, 1.7, 1.5, 1.5, 1.25, .90, 1.7, 1.6, 1.25, 1.2, 1.15, .036, .090, 1.5 };
@@ -100,26 +99,20 @@ namespace KratosApp.Models
             double CwaRider, Ka, cardB;
             var Frg = 9.81 * (MBik + M) * (CrEff * Math.Cos(Slope) + Math.Sin(Slope));
 
-            var windtxt = "Tail-wind speed is greater than bicycle-speed.\nTherefore the air drag could not be evaluated correctly.\nTry it again with a less negative wind speed.";
-            var P0txt = "Rider\"s Power <= 0";
-            var P1txt = "Rider\"s Power > 0";
-            var Ptxt = " Watt.\nThe program has presumed to reset the Cadence to ";
-
-
             // Calculate based on Power
             if (fP > 0)
             {
                 if (P > 0 && cad == 0)
                 {
                     cad = prefCad;
-                    WRITE_OUTPUT(fCadc, 0, cad);
-                    alert(P1txt + Ptxt + cad + ".");
+                    //WRITE_OUTPUT(fCadc, 0, cad);
+                    //alert(P1txt + Ptxt + cad + ".");
                 }
                 if (P <= 0 && cad > 0)
                 {
-                    WRITE_OUTPUT(fCadc, 0, 0);
                     cad = 0;
-                    alert(P0txt + Ptxt + "0.");
+                    //WRITE_OUTPUT(fCadc, 0, 0);
+                    //alert(P0txt + Ptxt + "0.");
                 }
                 CwaRider = (1 + cad * cCad) * afCd[bikeI] * adipos * (((hRider - adipos) * afSin[bikeI]) + adipos);
                 Ka = 176.5 * Math.Exp(-Hn * .0001253) * (CwaRider + CwaBike) / (273 + T);
@@ -138,13 +131,12 @@ namespace KratosApp.Models
                     Vms = 2 * Math.Sqrt(-cardB) * Math.Cos(Math.Acos(cardA / Math.Sqrt(Math.Pow(-cardB, 3))) / (double)3);
                 Vms -= 2 * W / (double)3 + CrDyn / (double)(3 * Ka);
 
-                WRITE_OUTPUT(fV, 1, ((iLang == 1) ? 2.2369 : 3.6) * Vms);
                 double fVoutput = ((iLang == 1) ? 2.2369 : 3.6) * Vms;
 
                 if (Vms < -W)
                 {
-                    alert("Probably wrong speed result.\n" + windtxt);
-                    return;
+                    throw new Exception("Probably wrong speed result.\n"
+                        + "Tail-wind speed is greater than bicycle-speed.\nTherefore the air drag could not be evaluated correctly.\nTry it again with a less negative wind speed.");
                 }
             }
 
@@ -152,20 +144,21 @@ namespace KratosApp.Models
             // Caclculate based on Speed
             if (fV > 0)
             {
+                // TODO: Remove loop?
                 double y = 7979;
                 while (y == 7979 || Math.Round((double)y) <= 0 && cad > 0 || Math.Round((double)y) > 0 && cad == 0)
                 {
                     if (y != 7979 && Math.Round((double)y) <= 0 && cad > 0)
                     {
                         cad = 0;
-                        WRITE_OUTPUT(fCadc, 0, cad);
-                        alert(P0txt + Ptxt + "0.");
+                        //WRITE_OUTPUT(fCadc, 0, cad);
+                        //alert(P0txt + Ptxt + "0.");
                     }
                     if (y != 7979 && Math.Round((double)y) > 0 && cad == 0)
                     {
                         cad = prefCad;
-                        WRITE_OUTPUT(fCadc, 0, cad);
-                        alert(P1txt + Ptxt + cad + ".");
+                        //WRITE_OUTPUT(fCadc, 0, cad);
+                        //alert(P1txt + Ptxt + cad + ".");
                     }
                     var vw = V + W;
                     CwaRider = (1 + cad * cCad) * afCd[bikeI] * adipos * (((hRider - adipos) * afSin[bikeI]) + adipos);
@@ -178,16 +171,5 @@ namespace KratosApp.Models
                 }
             }
         }
-
-        public static void alert(string s)
-        {
-            //Debug.WriteLine("ALERT: " + s);
-        }
-
-        public static void WRITE_OUTPUT(double d, int i, double d2)
-        {
-            //Debug.WriteLine(String.Format("{0} {1} {2}", d, i, d2));
-        }
     }
-
 }
