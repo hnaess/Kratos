@@ -14,6 +14,7 @@ namespace KratosApp.Controller
 {
     public class KratosController : ApiController
     {
+
         Kratos[] kratoses = new Kratos[] 
         { 
             //new Kratos { Id = 1, Name = "Tomato Soup", Category = "Groceries", Price = 1 }, 
@@ -22,6 +23,49 @@ namespace KratosApp.Controller
         };
 
         public IEnumerable<Kratos> Get()
+        {
+            List<Kratos> kratosList = new List<Kratos>();
+
+            var kratosFirst = GetFromQueryString();
+            kratosFirst.Calc(Kratos.CalcMethod.Power);
+
+            // Default
+            AddKratos(kratosList, kratosFirst);
+            
+            // Riders weight
+            BasedOnRiderWeight(kratosList, kratosFirst, 5);
+
+            return kratosList;
+        }
+
+        private static Kratos BasedOnRiderWeight(List<Kratos> kratosList, Kratos kratos, int vRidersWeight)
+        {
+            var kratos1 = kratos.ShallowCopy();
+            kratos1.fM += vRidersWeight;
+            kratos1.Calc();
+            AddKratos(kratosList, kratos1, String.Format("Rider weight {0}", vRidersWeight));
+
+            var kratos2 = kratos.ShallowCopy();
+            kratos2.fM -= vRidersWeight;
+            kratos2.Calc();
+            AddKratos(kratosList, kratos2, String.Format("Rider weight -{0}", vRidersWeight));
+
+            return kratos;
+        }
+
+        private static void AddKratos(List<Kratos> kratosList, Kratos kratos, string text)
+        {
+            kratos.Ext = text;
+            AddKratos(kratosList, kratos);
+        }
+
+        private static void AddKratos(List<Kratos> kratosList, Kratos kratos)
+        {
+            kratosList.Add(kratos);
+            Debug.WriteLine("Speed " + kratos.SpeedOutput);
+        }
+
+        private static Kratos GetFromQueryString()
         {
             var kratos = new Kratos()
             {
@@ -37,23 +81,9 @@ namespace KratosApp.Controller
                 fmr = 9.5,
                 fT = 20,
                 fHn = 350,
-                
+                Ext = "",
             };
-            Kratos copy = kratos.DeepClone();
-
-            //kratos.Calc(Kratos.CalcMethod.Speed);
-            //Debug.WriteLine("Power " + kratos.PowerOutput);
-
-            kratos.Calc(Kratos.CalcMethod.Power);
-            Debug.WriteLine("Speed " + kratos.SpeedOutput);
-
-            kratos = copy.DeepClone();
-            kratos.fM = 100;
-            kratos.Calc(Kratos.CalcMethod.Power);
-            Debug.WriteLine("Speed " + kratos.SpeedOutput);
-
-
-            return new List<Kratos>() { kratos };
+            return kratos;
         }
 
         //public IEnumerable<Kratos> GetAllProducts()

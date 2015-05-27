@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Product App</title>
+</head>
+<body>
+
+    <div>
+        <h2>All kratos</h2>
+        <ul id="kratosList" />
+    </div>
+    <div>
+        <h2>Riders Weight</h2>
+        <input type="text" id="riderWeight" size="5" />
+        <input type="button" value="Search" onclick="find();" />
+        <p id="kratos" />
+    </div>
+
+    <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
+    <script>
+        var apiUrl = 'api/kratos';
+
+    $(document).ready(function () {
+        // Send an AJAX request
+        $.getJSON(apiUrl)
+            .done(function (data) {
+                // On success, 'data' contains a list of products.
+                $.each(data, function (key, item) {
+                    // Add a list item for the product.
+                    $('<li>', { text: formatItem(item) }).appendTo($('#kratosList'));
+                });
+            });
+    });
+
+    function formatItem(item) {
+        return item.Ext + ': $' + item.SpeedOutput;
+    }
+
+    function find() {
+      var id = $('#riderWeight').val();
+      $.getJSON(uri + '/' + id)
+          .done(function (data) {
+              $('#kratos').text(formatItem(data));
+          })
+          .fail(function (jqXHR, textStatus, err) {
+              $('#kratos').text('Error: ' + err);
+          });
+    }
+    </script>
+</body>
+</html>

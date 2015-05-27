@@ -5,7 +5,6 @@ using System.Web;
 
 namespace KratosApp.Models
 {
-    [Serializable]
     public class Kratos
     {
         public double PowerOutput { get; private set; }
@@ -37,6 +36,8 @@ namespace KratosApp.Models
         /// <summary>Rolling Resistance Coeff. Cr</summary>
         public double CrEff { get; private set; }
 
+        public string Ext { get; set; }
+
 
 
         bool isTandem { get { return bike == "tandem"; } }
@@ -65,6 +66,21 @@ namespace KratosApp.Models
 
         public enum CalcMethod { Power, Speed };
 
+
+        public Kratos ShallowCopy()
+        {
+            return (Kratos)this.MemberwiseClone();
+        }
+
+        public void Calc()
+        {
+            if (fP > 0)
+                Calc(CalcMethod.Power);
+            else if (fV > 0)
+                Calc(CalcMethod.Speed);
+            else
+                throw new Exception("Power or Speed has to be bigger than zero");
+        }
 
         public void Calc(CalcMethod calcMethod)
         {
