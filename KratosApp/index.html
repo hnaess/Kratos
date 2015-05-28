@@ -10,9 +10,10 @@
         <ul id="kratosList" />
     </div>
     <div>
-        <h2>Riders Weight</h2>
-        <input type="text" id="riderWeight" size="5" />
-        <input type="button" value="Search" onclick="find();" />
+        <label for=weight>Riders Weight</label>
+        <input id="weightRider" type=range id=weight min=10 value=80 max=200 step=1 onchange="weightRiderValue.value = weightRider.value"/>
+        <output id="weightRiderValue">5</output>
+        <input type="button" value="Calc" onclick="find();" />
         <p id="kratos" />
     </div>
 
@@ -20,36 +21,36 @@
     <script>
         var apiUrl = 'api/kratos';
 
-    //$(document).ready(function () {
-    //    // Send an AJAX request
-    //    $.getJSON(apiUrl)
-    //        .done(function (data) {
-    //            // On success, 'data' contains a list of products.
-    //            $.each(data, function (key, item) {
-    //                // Add a list item for the product.
-    //                $('<li>', { text: formatItem(item) }).appendTo($('#kratosList'));
-    //            });
-    //        });
-    //});
+        //$(document).ready(function () {
+        //    // Send an AJAX request
+        //    $.getJSON(apiUrl)
+        //        .done(function (data) {
+        //            // On success, 'data' contains a list of products.
+        //            $.each(data, function (key, item) {
+        //                // Add a list item for the product.
+        //                $('<li>', { text: formatItem(item) }).appendTo($('#kratosList'));
+        //            });
+        //        });
+        //});
 
-    function formatItem(item) {
-        return item.Ext + ': $' + item.SpeedOutput;
-    }
+        function formatItem(item) {
+            return item.Ext + ': $' + item.SpeedOutput;
+        }
 
-    function find() {
-      var id = $('#riderWeight').val();
-        $.getJSON(apiUrl)
-          .done(function (data) {
-              // On success, 'data' contains a list of products.
-              $.each(data, function (key, item) {
-                  // Add a list item for the product.
-                  $('<li>', { text: formatItem(item) }).appendTo($('#kratosList'));
+        function find() {
+            var id = $('#riderWeight').val();
+            $.getJSON(apiUrl)
+              .done(function (data) {
+                  // On success, 'data' contains a list of products.
+                  $.each(data, function (key, item) {
+                      // Add a list item for the product.
+                      $('<li>', { text: formatItem(item) }).appendTo($('#kratosList'));
+                  });
+              })
+              .fail(function (jqXHR, textStatus, err) {
+                  $('#kratos').text('Error: ' + err);
               });
-          })
-          .fail(function (jqXHR, textStatus, err) {
-              $('#kratos').text('Error: ' + err);
-          });
-    }
+        }
     </script>
 </body>
 </html>
