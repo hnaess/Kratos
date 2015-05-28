@@ -1,52 +1,66 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Product App</title>
+    <title>Kratos Beta</title>
+    <script src="Scripts/jquery-2.1.4.js"></script>
+    <script src="Scripts/jquery.mobile-1.4.5.js"></script>
+    <link href="Content/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
 </head>
 <body>
 
     <div>
-        <h2>All kratos</h2>
-        <ul id="kratosList" />
+        <h2>All kratos2</h2>
+        <div id="kratosList" />
     </div>
-    <div>
-        <label for=weight>Riders Weight</label>
-        <input id="weightRider" type=range id=weight min=10 value=80 max=200 step=1 onchange="weightRiderValue.value = weightRider.value"/>
-        <output id="weightRiderValue">5</output>
-        <input type="button" value="Calc" onclick="find();" />
-        <p id="kratos" />
+
+    <h1>Calculate</h1>
+    <div style="max-width: 600px;">
+        <form>
+            <label for="riderWeight">Rider's weight:</label>
+            <input type="range" name="riderWeight" id="riderWeight" min="1" max="200" value="80" onchange="find();">
+
+            <label for="bicycleWeight">Bicycle weight:</label>
+            <input type="range" name="bicycleWeight" id="bicycleWeight" min="1" max="50" value="8" onchange="find();">
+
+            <label for="windSpeed">Wind speed:</label>
+            <input type="range" name="windSpeed" id="windSpeed" min="-30" max="30" value="0" onchange="find();">
+
+            <label for="slopeRead">Slope of road:</label>
+            <input type="range" name="slopeRead" id="slopeRead" min="0" max="30" value="0" onchange="find();">
+
+            <input type="button" value="Calc" onclick="find();" />
+        </form>
     </div>
 
     <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
     <script>
         var apiUrl = 'api/kratos';
 
-        //$(document).ready(function () {
-        //    // Send an AJAX request
-        //    $.getJSON(apiUrl)
-        //        .done(function (data) {
-        //            // On success, 'data' contains a list of products.
-        //            $.each(data, function (key, item) {
-        //                // Add a list item for the product.
-        //                $('<li>', { text: formatItem(item) }).appendTo($('#kratosList'));
-        //            });
-        //        });
-        //});
-
         function formatItem(item) {
             return item.Ext + ': $' + item.SpeedOutput;
         }
 
         function find() {
-            var id = $('#riderWeight').val();
-            $.getJSON(apiUrl)
-              .done(function (data) {
-                  // On success, 'data' contains a list of products.
-                  $.each(data, function (key, item) {
-                      // Add a list item for the product.
-                      $('<li>', { text: formatItem(item) }).appendTo($('#kratosList'));
-                  });
-              })
+            var riderWeight = $('#riderWeight').val();
+            var bicycleWeight = $('#bicycleWeight').val();
+            var windSpeed = $('#windSpeed').val();
+            var slopeRead = $('#slopeRead').val();
+
+
+            localStorage.setItem("riderWeight", riderWeight);
+            localStorage.setItem("bicycleWeight", riderWeight);
+            localStorage.setItem("windSpeed", riderWeight);
+            localStorage.setItem("slopeRead", riderWeight);
+
+            $.getJSON(apiUrl, { riderWeight: riderWeight, bicycleWeight: bicycleWeight, windSpeed: windSpeed, slopeRead: slopeRead },
+                function (data) {
+                    $('#kratosList').empty();
+                    // On success, 'data' contains a list of products.
+                    $.each(data, function (key, item) {
+                        // Add a list item for the product.
+                        $('<div>', { text: formatItem(item) }).appendTo('#kratosList');
+                    });
+                })
               .fail(function (jqXHR, textStatus, err) {
                   $('#kratos').text('Error: ' + err);
               });
@@ -54,3 +68,22 @@
     </script>
 </body>
 </html>
+
+<script type="text/javascript" language="javascript">
+
+    $(function () {
+        //console.log("TEST");
+        //$("#riderWeight").on("input", function () { console.log("X") });
+
+        //$("#riderWeight").change(function () {
+        //    console.log("y")
+        //});
+
+        if (localStorage.getItem("riderWeight") !== null)
+            $('#riderWeight').val(localStorage.getItem("riderWeight"));
+
+
+
+        //console.log("TEST x");
+    });
+</script> 

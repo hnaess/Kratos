@@ -5,6 +5,8 @@ using System.Web;
 
 namespace KratosApp.Models
 {
+    // This also: http://veloclinic.com/intro-to-power-estimate-modelling/
+    
     public class Kratos
     {
         public double PowerOutput { get; private set; }
@@ -135,8 +137,10 @@ namespace KratosApp.Models
 
                 if (Vms < -W)
                 {
-                    throw new Exception("Probably wrong speed result.\n"
-                        + "Tail-wind speed is greater than bicycle-speed.\nTherefore the air drag could not be evaluated correctly.\nTry it again with a less negative wind speed.");
+                    string error = "Probably wrong speed result.\n"
+                        + "Tail-wind speed is greater than bicycle-speed.\nTherefore the air drag could not be evaluated correctly.\nTry it again with a less negative wind speed.";
+                    Console.WriteLine(error);
+                    //throw new Exception(error);
                 }
             }
 

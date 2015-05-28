@@ -26,7 +26,9 @@ namespace KratosApp.Controller
         {
             List<Kratos> kratosList = new List<Kratos>();
 
-            var kratosFirst = GetFromQueryString();
+            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
+            var kratosFirst = GetFromQueryString(nvc);
+
             kratosFirst.Calc(Kratos.CalcMethod.Power);
 
             // Default
@@ -65,7 +67,18 @@ namespace KratosApp.Controller
             Debug.WriteLine("Speed " + kratos.SpeedOutput);
         }
 
-        private static Kratos GetFromQueryString()
+        private static Kratos GetFromQueryString(NameValueCollection nvc)
+        {
+            var kratos = DefaultValues();
+            kratos.fM = Convert.ToDouble(nvc["riderWeight"]);
+            kratos.fmr = Convert.ToDouble(nvc["bicycleWeight"]);
+            kratos.fW = Convert.ToDouble(nvc["windSpeed"]);
+            kratos.fstg = Convert.ToDouble(nvc["slopeRead"]);
+
+            return kratos;
+        }
+
+        private static Kratos DefaultValues()
         {
             var kratos = new Kratos()
             {
@@ -85,6 +98,7 @@ namespace KratosApp.Controller
             };
             return kratos;
         }
+
 
         //public IEnumerable<Kratos> GetAllProducts()
         //{
